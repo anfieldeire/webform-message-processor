@@ -1,0 +1,85 @@
+function process_text(){
+
+// sample email body text below
+	/* var email.body_text = "Content: 0|Review Reason|Could not match unique patient record 1|Name|Joe, Smith 2|Address|900 main st^Bronx NY 10460 3|Date of Birth|2/02/1991 5|Gender|Male 6|Home Phone| 7|Work Phone| 8|Email Address|joe@gmail.com 10|Mobile Phone|333-222-4444 11|Medical Record Number| 4|SSN|111-22-3333" */
+
+	var a = [];
+	
+	var b = email.body_text.replace(/\r\n/g, "\r").replace(/\n/g, "\r").split(/\r/);
+
+  var index;
+
+  var data_output;
+
+  re = /\d+\|/g;
+   
+  var d = email.body_text.match(re);
+	
+  var start_index = 0;
+	var new_arr = [];
+	var second_arr = [];
+	
+  gs.log('Email process: d: ' + d);
+	gs.log('Email process: d: len: ' + d.length);
+	gs.log('Body text2 ' + email.body_text.length);
+	
+               
+        for (i=0; i < d.length; i++){
+        
+            gs.log('i: ' + i);
+			      var index_config = email.body_text.indexOf(d[i], start_index);
+            gs.log('Index: ' + index_config);
+
+            var next_item = email.body_text.indexOf(d[i+1])
+            gs.log('Next item: ' + next_item);
+            
+
+			// Clause for last item in the arr to end of arr
+			if (i+1==d.length){
+				
+				gs.log('Last item in array');
+				var text = email.body_text.substring(index_config, email.body_text.length);
+				gs.log('Last str: ' + text);
+				new_arr.push(text);
+				var text_len = text.length;
+				var find_char = text.substring(d[i].length, text.length).replace('|', ': ');
+				gs.log('Find Char: ' + find_char);
+				second_arr.push(find_char);
+				
+				}
+			
+			// Minus one means the item isnt found or is at the end of list
+			if (next_item !=-1){
+				var str_endpos = email.body_text.indexOf(d[i+1], next_item);
+
+				var str_endpos = str_endpos -1;
+
+				gs.log('Str end pos: ' + str_endpos);
+
+				var text = email.body_text.substring(index_config, str_endpos);
+				new_arr.push(text);
+				
+				var text_len = text.length;
+				var find_char = text.substring(d[i].length, text.length).replace('|', ': ');
+				second_arr.push(find_char);
+				
+				gs.log('Find Char: ' + find_char);
+				gs.log('Text: ' + text);
+				gs.log('Text: len ' + text.length);
+				}
+         
+			gs.log('New arr: ' + new_arr);
+		}
+		
+
+		for (i=0; i< second_arr.length; i++){
+			
+		  gs.log('Second arr: ' + second_arr[i]);
+			
+		}
+    gs.log('Print arr once: ' + second_arr);
+		var data = second_arr.join('\n');
+		gs.log('data: ' + data);
+		current.u_custom_field = data;
+                     
+} process_text();              
