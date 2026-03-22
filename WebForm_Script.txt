@@ -14,46 +14,35 @@ function process_text(){
     var new_arr = [];
     var second_arr = [];
 	
-    gs.log('Email process: d: ' + d);
-    gs.log('Email process: d: len: ' + d.length);
-    gs.log('Body text2 ' + email.body_text.length);
 	           
     for (i=0; i < d.length; i++){
 
-            gs.log('i: ' + i);
 	    var index_config = email.body_text.indexOf(d[i], start_index);
-            gs.log('Index: ' + index_config);
-            var next_item = email.body_text.indexOf(d[i+1])
-            gs.log('Next item: ' + next_item);
+        var next_item = email.body_text.indexOf(d[i+1])
             
 	    // Clause for last item in the arr to end of arr
 	    if (i+1==d.length){
 				
-	        gs.log('Last item in array');
-		var text = email.body_text.substring(index_config, email.body_text.length);
-		gs.log('Last str: ' + text);
-		new_arr.push(text);
-		var text_len = text.length;
-		var find_char = text.substring(d[i].length, text.length).replace('|', ': ');
-		gs.log('Find Char: ' + find_char);
-		second_arr.push(find_char);		
+			var text = email.body_text.substring(index_config, email.body_text.length);
+			new_arr.push(text);
+			var text_len = text.length;
+			var find_char = text.substring(d[i].length, text.length).replace('|', ': ');
+			second_arr.push(find_char);		
 		}
 
 		// Minus one means the item isnt found or is at the end of list
 	    if (next_item !=-1){
-		var str_endpos = email.body_text.indexOf(d[i+1], next_item);
-                var str_endpos = str_endpos -1;
-		gs.log('Str end pos: ' + str_endpos);
-		var text = email.body_text.substring(index_config, str_endpos);
-		new_arr.push(text);		
-		var text_len = text.length;
-		var find_char = text.substring(d[i].length, text.length).replace('|', ': ');
-		second_arr.push(find_char);
-		gs.log('Find Char: ' + find_char);
-		gs.log('Text: ' + text);
-		gs.log('Text: len ' + text.length);
-		}
-		gs.log('New arr: ' + new_arr);
+
+			var str_endpos = email.body_text.indexOf(d[i+1], next_item);
+            var str_endpos = str_endpos -1;	
+			var text = email.body_text.substring(index_config, str_endpos);
+			new_arr.push(text);		
+			var text_len = text.length;
+			var find_char = text.substring(d[i].length, text.length).replace('|', ': ');
+			second_arr.push(find_char);
+
+			}
+
 		}
 		
 
@@ -62,9 +51,8 @@ function process_text(){
 		gs.log('Second arr: ' + second_arr[i]);
 			
 		}
-		gs.log('Print arr once: ' + second_arr);
+
 		var field = second_arr.join('\n');
-		gs.log('field: ' + field);
 		current.u_custom_field = field;
          
                
